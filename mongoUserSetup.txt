@@ -1,0 +1,13 @@
+use alizzWsc
+db.createUser(
+  {
+    user: "alizz-wsc",
+    pwd: passwordPrompt(),  // or cleartext password
+    roles: [
+        {
+            role: 'readWrite',
+            db: 'alizzWsc'
+        }
+    ]
+  }
+)
