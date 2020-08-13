@@ -14,6 +14,7 @@ exports.postUser = (req, res, next) => {
   const request = req.body;
   const user = new User({
     username: req.body.username,
+
     roles: req.body.roles,
   });
   user

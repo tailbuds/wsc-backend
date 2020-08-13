@@ -23,6 +23,7 @@ const UserSchema = new Schema(
       unique: true,
       required: [true, 'username required'],
     },
+
     roles: {
       type: Array,
       allowNull: false,
