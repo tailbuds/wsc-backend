@@ -8,7 +8,7 @@
 const mongoose = require('mongoose');
 const User = require('./user');
 
-const { isAmount } = '../util/validators.js';
+const helper = require('../util/validators.js');
 
 const Schema = mongoose.Schema;
 
@@ -55,7 +55,7 @@ const scorecardSchema = new Schema(
         required: false,
         allowNull: true,
         default: null,
-        enum: ['male', 'female', 'other'],
+        enum: ['male', 'female', 'other', null],
       },
       ageRange: {
         type: String,
@@ -69,6 +69,7 @@ const scorecardSchema = new Schema(
           '55-65',
           '65-70',
           'more than 70',
+          null,
         ],
       },
       nationalityType: {
@@ -76,43 +77,45 @@ const scorecardSchema = new Schema(
         required: false,
         allowNull: true,
         default: null,
-        enum: ['omani', 'gcc', 'expat'],
+        enum: ['omani', 'gcc', 'expat', null],
       },
       networth: {
         value: {
           type: String,
           required: false,
-          allowNull: false,
-          default: '0.000',
+          allowNull: true,
+          default: null,
           validate: {
-            validator: (v) => isAmount(v),
+            validator: (v) => helper.isAmount(v),
             message: (value) => `${value.value} is not a valid amount`,
           },
         },
         position: {
           type: String,
           required: false,
-          allowNull: false,
-          default: 'not available',
+          allowNull: true,
+          default: null,
           enum: [
             'not available',
             'less than 1 million OMR',
             '1-2.5 million OMR',
             '2.5-5 million OMR',
             'more than 5 million OMR',
+            null,
           ],
         },
         document: {
           type: String,
           required: false,
-          allowNull: false,
-          default: 'no information',
+          allowNull: true,
+          default: null,
           enum: [
             'auditor A',
             'auditor B',
             'auditor C',
             'self declared',
             'no information',
+            null,
           ],
         },
         file: {
@@ -126,58 +129,103 @@ const scorecardSchema = new Schema(
         type: String,
         allowNull: true,
         required: false,
-        default: 'unidentified cashflow',
+        default: null,
         enum: [
           'assigned cash flow above 150%',
           'assigned cash flow 100%-150%',
           'assigned cash flow below 100%',
           'identified cash flow not assigned',
           'unidentified cashflow',
+          null,
         ],
       },
       proposedLimit: {
         type: String,
-        allowNull: true,
         required: false,
+        allowNull: true,
         default: null,
+        validate: {
+          validator: (v) => helper.isAmount(v),
+          message: (value) => `${value.value} is not a valid amount`,
+        },
       },
       bcsb: {
         totalExistingLimit: {
           type: String,
-          allowNull: true,
           required: false,
+          allowNull: true,
           default: null,
+          validate: {
+            validator: (v) => helper.isAmount(v),
+            message: (value) => `${value.value} is not a valid amount`,
+          },
         },
         status: {
           type: String,
           allowNull: true,
           required: false,
           default: null,
+          enum: [
+            'NORMAL',
+            'WATCHLIST (O.L.E.M)',
+            'SUB-STANDARD',
+            'DOUBTFUL',
+            'LOSS',
+            'no information (no history)',
+            null,
+          ],
         },
         relatedCompaniesStatus: {
           type: String,
           allowNull: true,
           required: false,
           default: null,
+          enum: [
+            'NORMAL',
+            'WATCHLIST (O.L.E.M)',
+            'SUB-STANDARD',
+            'DOUBTFUL',
+            'LOSS',
+            'NA (no related company)',
+            null,
+          ],
         },
       },
       dpdOneYear: {
-        type: Number,
+        type: String,
         allowNull: true,
         required: false,
         default: null,
+        enum: [
+          '0',
+          '1-29:less than 2',
+          '1-29:3-5',
+          '1-29:more than 5',
+          '30-59:less than 2',
+          '30-59:3-5',
+          '30-59:more than 5',
+          '60-89:less than 2',
+          '60-89:3-5',
+          '60-89:more than 5',
+          'above 90 days:1',
+          'above 90 days:2 and above',
+          'NA (new customer)',
+          null,
+        ],
       },
       relationYears: {
-        type: Number,
+        type: String,
         allowNull: true,
         required: false,
         default: null,
+        enum: ['less than 1', '1-3', '3-5', 'more than 5', null],
       },
       businessYears: {
-        type: Number,
+        type: String,
         allowNull: true,
         required: false,
         default: null,
+        enum: ['more than 20', '10-20', '3-10', '0-3', 'no business', null],
       },
       facilities: [
         {
@@ -188,10 +236,14 @@ const scorecardSchema = new Schema(
             default: null,
           },
           limit: {
-            type: Number,
-            allowNull: true,
+            type: String,
             required: false,
+            allowNull: true,
             default: null,
+            validate: {
+              validator: (v) => helper.isAmount(v),
+              message: (value) => `${value.value} is not a valid amount`,
+            },
           },
           collateralCoveragePercent: {
             cashMargin: {

@@ -1,3 +1,3 @@
-const isAmount = (value) => value.match('^[d]+[.][d]{3}$');
-
-module.exports = { isAmount };
+exports.isAmount = function (value) {
+  value.match('^[d]+[.][d]{3}$');
+};

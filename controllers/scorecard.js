@@ -11,13 +11,7 @@ const Scorecard = require('../models/scorecard');
 
 // POST create scorecard
 exports.postScorecard = (req, res, next) => {
-  const request = req.body;
-  const scorecard = new Scorecard({
-    customer: {
-      name: req.body.customer.name,
-      new: req.body.customer.new,
-    },
-  });
+  const scorecard = new Scorecard(req.body);
   scorecard
     .save()
     .then((sc) => res.status(201).json({ success: 1, created: sc }))
