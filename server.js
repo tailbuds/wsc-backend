@@ -61,7 +61,8 @@ if (process.env.NODE_ENV === 'production') {
 const userRoute = require('./routes/user');
 const scorecardRoute = require('./routes/scorecard');
 const documentsRoute = require('./routes/document');
-
+const scoreDictionaryRoute = require('./routes/scoreDictionary');
+const scale = require('./routes/scale');
 // * importing controllers
 const errorController = require('./controllers/error');
 
@@ -94,11 +95,17 @@ app.use('/documents', express.static(path.join(__dirname, 'documents')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// * scoreDictionary Route
+app.use(scoreDictionaryRoute);
+
 // * user Route
 app.use(userRoute);
 
 // * scorecard Route
 app.use(scorecardRoute);
+
+//* scale Route
+app.use(scale);
 
 // * document Route
 app.use(documentsRoute);

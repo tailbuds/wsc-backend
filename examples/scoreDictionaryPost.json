@@ -1,0 +1,139 @@
+{
+  "facilityScores": {
+    "cashMargin": [
+      { "_id": "0", "value": 0 },
+      { "_id": "10%-25%", "value": 25 },
+      { "_id": "25%-50%", "value": 50 },
+      { "_id": "50%-75%", "value": 100 },
+      { "_id": "75%-100%", "value": 150 },
+      { "_id": "greater than 100%", "value": 200 }
+    ],
+    "bankGuaranteeOne": [
+      { "_id": "0", "value": 0 },
+      { "_id": "25%-50%", "value": 50 },
+      { "_id": "50%-75%", "value": 75 },
+      { "_id": "75%-100%", "value": 120 },
+      { "_id": "greater than 100%", "value": 150 }
+    ],
+    "bankGuaranteeTwo": [
+      { "_id": "0", "value": 0 },
+      { "_id": "25%-50%", "value": 50 },
+      { "_id": "50%-75%", "value": 75 },
+      { "_id": "75%-100%", "value": 100 },
+      { "_id": "greater than 100%", "value": 125 }
+    ],
+    "shares": [
+      { "_id": "0", "value": 0 },
+      { "_id": "10%-50%", "value": 15 },
+      { "_id": "50%-75%", "value": 25 },
+      { "_id": "75%-125%", "value": 50 },
+      { "_id": "125%-150%", "value": 75 },
+      { "_id": "greater than 150%", "value": 100 }
+    ],
+    "freeholdFirstDegree": [
+      { "_id": "0", "value": 0 },
+      { "_id": "10%-50%", "value": 15 },
+      { "_id": "50%-75%", "value": 25 },
+      { "_id": "75%-125%", "value": 50 },
+      { "_id": "125%-150%", "value": 75 },
+      { "_id": "greater than 150%", "value": 100 }
+    ],
+    "leaseholdFirstDegree": [
+      { "_id": "0", "value": 0 },
+      { "_id": "75%-100%", "value": 15 },
+      { "_id": "100%-150%", "value": 40 },
+      { "_id": "150%-200%", "value": 60 },
+      { "_id": "greater than 200%", "value": 75 }
+    ],
+    "freeholdSecondDegree": [
+      { "_id": "0", "value": 0 },
+      { "_id": "100%-150%", "value": 15 },
+      { "_id": "150%-200%", "value": 40 },
+      { "_id": "200%-250%", "value": 60 },
+      { "_id": "greater than 250%", "value": 75 }
+    ]
+  },
+  "obligorScores": {
+    "netWorth": [
+      { "_id": "not available", "value": 0 },
+      { "_id": "less than 1 million OMR", "value": 15 },
+      { "_id": "1-2.5 million OMR", "value": 40 },
+      { "_id": "2.5-5 million OMR", "value": 60 },
+      { "_id": "more than 5 million OMR", "value": 75 }
+    ],
+    "networthSupport": [
+      { "_id": "auditor A", "value": 0 },
+      { "_id": "auditor B", "value": 15 },
+      { "_id": "'auditor C", "value": 40 },
+      { "_id": "self declared", "value": 60 },
+      { "_id": "no information", "value": 75 }
+    ],
+    "repaymentSource": [
+      { "_id": "assigned cash flow above 150%", "value": 0 },
+      { "_id": "assigned cash flow 100%-150%", "value": 15 },
+      { "_id": "'assigned cash flow below 100%", "value": 40 },
+      { "_id": "identified cash flow not assigned", "value": 60 },
+      { "_id": "unidentified cashflow", "value": 75 }
+    ],
+    "internalNetworthLimitRatio": [],
+    "totalNetworthLimitRation": [],
+    "individualCBOStatus": [
+      { "_id": "NORMAL", "value": 0 },
+      { "_id": "WATCHLIST (O.L.E.M)", "value": 15 },
+      { "_id": "SUB-STANDARD", "value": 40 },
+      { "_id": "DOUBTFUL", "value": 60 },
+      { "_id": "LOSS", "value": 60 },
+      { "_id": "no information (no history)", "value": 75 }
+    ],
+    "relatedCompaniesCBOStatus": [
+      { "_id": "NORMAL", "value": 0 },
+      { "_id": "WATCHLIST (O.L.E.M)", "value": 15 },
+      { "_id": "SUB-STANDARD", "value": 40 },
+      { "_id": "DOUBTFUL", "value": 60 },
+      { "_id": "LOSS", "value": 60 },
+      { "_id": "NA (no related company)", "value": 75 }
+    ],
+    "oneYearDpd": [
+      { "_id": "0", "value": 0 },
+      { "_id": "1-29:less than 2", "value": 15 },
+      { "_id": "'1-29:less than 2", "value": 40 },
+      { "_id": "1-29:less than 2", "value": 60 },
+      { "_id": "30-59:less than 2", "value": 60 },
+      { "_id": "30-59:3-5", "value": 75 },
+      { "_id": "30-59:more than 5", "value": 0 },
+      { "_id": "60-89:less than 2", "value": 15 },
+      { "_id": "60-89:3-5", "value": 40 },
+      { "_id": "60-89:more than 5", "value": 60 },
+      { "_id": "above 90 days:1", "value": 60 },
+      { "_id": "above 90 days:2 and above", "value": 75 },
+      { "_id": "NA (new customer)", "value": 75 }
+    ],
+
+    "relationYears": [
+      { "_id": "less than 1", "value": 0 },
+      { "_id": "1-3", "value": 15 },
+      { "_id": "3-5", "value": 40 },
+      { "_id": "more than 5", "value": 60 }
+    ],
+    "nationality": [
+      { "_id": "omani", "value": 15 },
+      { "_id": "gcc", "value": 40 },
+      { "_id": "expat", "value": 60 }
+    ],
+    "businessYears": [
+      { "_id": "more than 20", "value": 15 },
+      { "_id": "10-20", "value": 40 },
+      { "_id": "3-10", "value": 60 },
+      { "_id": "0-3", "value": 60 },
+      { "_id": "no business", "value": 75 }
+    ],
+    "ageRange": [
+      { "_id": "less than 30'", "value": 15 },
+      { "_id": "30-45", "value": 40 },
+      { "_id": "45-55", "value": 60 },
+      { "_id": "55-65", "value": 60 },
+      { "_id": "65-70", "value": 75 },
+      { "_id": "more than 70", "value": 75 }
+    ]
+  }
+}

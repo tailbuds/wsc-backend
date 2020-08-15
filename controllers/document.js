@@ -64,6 +64,7 @@ exports.patchDocument = (req, res, next) => {
             reason: err.message,
           });
         });
+      break;
 
     case 'support':
       Scorecard.findByIdAndUpdate(
@@ -95,5 +96,6 @@ exports.patchDocument = (req, res, next) => {
             reason: err.message,
           });
         });
+      break;
   }
 };

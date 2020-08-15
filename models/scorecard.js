@@ -6,11 +6,124 @@
  */
 
 const mongoose = require('mongoose');
-const User = require('./user');
 
 const helper = require('../util/validators.js');
 
 const Schema = mongoose.Schema;
+
+const facilitySchema = new Schema(
+  {
+    product: {
+      type: String,
+      allowNull: true,
+      required: false,
+      default: null,
+    },
+    limit: {
+      type: String,
+      required: false,
+      allowNull: true,
+      default: null,
+      validate: {
+        validator: (v) => helper.isAmount(v),
+        message: (value) => `${value.value} is not a valid amount`,
+      },
+    },
+    collateralValue: {
+      type: String,
+      required: false,
+      allowNull: true,
+      default: null,
+      validate: {
+        validator: (v) => helper.isAmount(v),
+        message: (value) => `${value.value} is not a valid amount`,
+      },
+    },
+    collateralCoveragePercent: {
+      cashMargin: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: [
+          '0',
+          '10%-25%',
+          '25%-50%',
+          '50%-75%',
+          '75%-100%',
+          'greater than 100%',
+        ],
+      },
+      bankGuaranteeOne: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: ['0', '25%-50%', '50%-75%', '75%-100%', 'greater than 100%'],
+      },
+      bankGuaranteeTwo: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: ['0', '25%-50%', '50%-75%', '75%-100%', 'greater than 100%'],
+      },
+      shares: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: [
+          '0',
+          '10%-50%',
+          '50%-75%',
+          '75%-125%',
+          '125%-150%',
+          'greater than 150%',
+        ],
+      },
+      freeholdFirstDegree: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: [
+          '0',
+          '10%-50%',
+          '50%-75%',
+          '75%-125%',
+          '125%-150%',
+          'greater than 150%',
+        ],
+      },
+      leaseholdFirstDegree: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: ['0', '75%-100%', '100%-150%', '150%-200%', 'greater than 200%'],
+      },
+      freeholdSecondDegree: {
+        type: String,
+        allowNull: false,
+        required: false,
+        default: '0',
+        enum: ['0', '100%-150%', '150%-200%', '200%-250%', 'greater than 250%'],
+      },
+    },
+    score: {
+      type: Number,
+      allowNull: true,
+      required: false,
+      default: null,
+    },
+  },
+  { timestamps: false, toJSON: { virtuals: true } }
+);
+
+facilitySchema.virtual('collateralCoverageRatio').get(function () {
+  return `${+this.collateralValue / +this.limit}`;
+});
 
 const scorecardSchema = new Schema(
   {
@@ -27,6 +140,7 @@ const scorecardSchema = new Schema(
         unique: false,
         allowNull: false,
         uppercase: true,
+        maxLength: 135,
         validate: {
           validator: (name) => {
             const pattern =
@@ -227,128 +341,7 @@ const scorecardSchema = new Schema(
         default: null,
         enum: ['more than 20', '10-20', '3-10', '0-3', 'no business', null],
       },
-      facilities: [
-        {
-          product: {
-            type: String,
-            allowNull: true,
-            required: false,
-            default: null,
-          },
-          limit: {
-            type: String,
-            required: false,
-            allowNull: true,
-            default: null,
-            validate: {
-              validator: (v) => helper.isAmount(v),
-              message: (value) => `${value.value} is not a valid amount`,
-            },
-          },
-          collateralCoveragePercent: {
-            cashMargin: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '10%-25%',
-                '25%-50%',
-                '50%-75%',
-                '75%-100%',
-                'greater than 100%',
-              ],
-            },
-            bankGuaranteeOne: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '25%-50%',
-                '50%-75%',
-                '75%-100%',
-                'greater than 100%',
-              ],
-            },
-            bankGuaranteeTwo: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '25%-50%',
-                '50%-75%',
-                '75%-100%',
-                'greater than 100%',
-              ],
-            },
-            shares: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '10%-50%',
-                '50%-75%',
-                '75%-125%',
-                '125%-150%',
-                'greater than 150%',
-              ],
-            },
-            freeholdFirstDegree: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '10%-50%',
-                '50%-75%',
-                '75%-125%',
-                '125%-150%',
-                'greater than 150%',
-              ],
-            },
-            leaseholdFirstDegree: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '75%-100%',
-                '100%-150%',
-                '150%-200%',
-                'greater than 200%',
-              ],
-            },
-            freeholdSecondDegree: {
-              type: String,
-              allowNull: false,
-              required: false,
-              default: '0',
-              enum: [
-                '0',
-                '100%-150%',
-                '150%-200%',
-                '200%-250%',
-                'greater than 250%',
-              ],
-            },
-          },
-          score: {
-            type: Number,
-            allowNull: true,
-            required: false,
-            default: null,
-          },
-        },
-      ],
+      facilities: [facilitySchema],
       supportDocumentsFile: {
         type: String,
         allowNull: true,
@@ -372,18 +365,32 @@ const scorecardSchema = new Schema(
       user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        allowNull: false,
+        required: false,
       },
       submitted: {
         type: Boolean,
-        allowNull: true,
+        allowNull: false,
         required: false,
-        default: null,
+        default: false,
       },
       submitDate: {
         type: Date,
         required: false,
         allowNull: true,
         default: null,
+        validate: {
+          validator: function (v) {
+            if (this.maker.submitted && v) {
+              return true;
+            }
+            if (!this.maker.submitted && v === null) {
+              return true;
+            }
+            return false;
+          },
+          message: 'inconsistency in the maker object',
+        },
       },
     },
     approver: {
@@ -398,15 +405,39 @@ const scorecardSchema = new Schema(
         allowNull: true,
         required: false,
         default: null,
-        // validate: {
-        //   validator:
-        // }
+        validate: {
+          validator: function (v) {
+            if (this.approver.user === null && v === null) {
+              return true;
+            }
+            if (
+              (this.approver.user && v === true) ||
+              (this.approver.user && v === false)
+            ) {
+              return true;
+            }
+            return false;
+          },
+          message: 'inconsistency in the approver object',
+        },
       },
       submitDate: {
         type: Date,
         required: false,
         allowNull: true,
         default: null,
+        validate: {
+          validator: function (v) {
+            if (this.approver.user === null && v === null) {
+              return true;
+            }
+            if (this.approver.user && v) {
+              return true;
+            }
+            return false;
+          },
+          message: 'inconsistency in the approver object',
+        },
       },
     },
   },
@@ -415,7 +446,6 @@ const scorecardSchema = new Schema(
 
 scorecardSchema.virtual('status').get(function () {
   today = new Date();
-  console.log(!this.maker.submitted);
   if (this.expiryDt < today) {
     return 'expired';
   }
@@ -433,25 +463,21 @@ scorecardSchema.virtual('status').get(function () {
   }
 });
 
-// scorecardSchema.methods.getStatus = () => {
-//   if (new Date(this.expiryDt).getDate() > new Date().getDate()) {
-//     return 'expired';
-//   }
-//   if (!this.makerSubmit) {
-//     return 'draft';
-//   }
+scorecardSchema.virtual('customer.wtdAvgFacilityScore').get(function () {
+  const limits = this.customer.facilities.map((facility) => +facility.limit);
+  const totalLimit = limits.reduce((a, b) => a + b, 0);
+  const wtdScores = this.customer.facilities.map(
+    (facility) => facility.score * facility.limit
+  );
+  const wtdTotalScore = wtdScores.reduce((a, b) => a + b, 0);
+  return wtdTotalScore / totalLimit;
+});
 
-//   if (this.makerSubmit && !this.approved === null) {
-//     return 'inProcess';
-//   }
-
-//   if (this.makerSubmit && this.approved === true) {
-//     return 'approved';
-//   }
-
-//   if (this.makerSubmit && this.approved === false) {
-//     return 'rejected';
-//   }
-// };
+scorecardSchema.virtual('customer.limitCheck').get(function () {
+  const limits = this.customer.facilities.map((facility) => +facility.limit);
+  const totalLimit = limits.reduce((a, b) => a + b, 0);
+  const totalProposedLimit = +this.customer.proposedLimit;
+  return totalLimit === totalProposedLimit;
+});
 
 module.exports = mongoose.model('Scorecard', scorecardSchema);
