@@ -6,13 +6,22 @@
  */
 
 const express = require('express');
-const { body, validationResult } = require('express-validator');
-
 const router = express.Router();
 
 const scorecardController = require('../controllers/scorecard');
 
 // POST scorecard
-router.post('/scorecard', scorecardController.postScorecard);
+router.post('/scorecards', scorecardController.postScorecard);
+
+// * GET Scorecard
+router.get('/scorecards/:id', scorecardController.getScorecard);
+
+// GET Scorecards
+router.get('/scorecards', scorecardController.getScorecards);
+
+// DELETE Scorecard
+router.delete('/scorecards/:id', scorecardController.deleteScorecard);
+
+// PATCH scorecard
 
 module.exports = router;

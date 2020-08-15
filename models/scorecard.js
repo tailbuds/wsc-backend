@@ -341,6 +341,12 @@ const scorecardSchema = new Schema(
               ],
             },
           },
+          score: {
+            type: Number,
+            allowNull: true,
+            required: false,
+            default: null,
+          },
         },
       ],
       supportDocumentsFile: {
@@ -363,39 +369,89 @@ const scorecardSchema = new Schema(
       default: null,
     },
     maker: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    makerSubmit: {
-      type: Boolean,
-      allowNull: true,
-      required: false,
-      default: null,
-    },
-    makerSubmitDate: {
-      type: Date,
-      required: false,
-      allowNull: true,
-      default: null,
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      submitted: {
+        type: Boolean,
+        allowNull: true,
+        required: false,
+        default: null,
+      },
+      submitDate: {
+        type: Date,
+        required: false,
+        allowNull: true,
+        default: null,
+      },
     },
     approver: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    approved: {
-      type: Boolean,
-      allowNull: true,
-      required: false,
-      default: null,
-    },
-    approverSubmitDate: {
-      type: Date,
-      required: false,
-      allowNull: true,
-      default: null,
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        allowNull: false,
+        default: null,
+      },
+      approved: {
+        type: Boolean,
+        allowNull: true,
+        required: false,
+        default: null,
+        // validate: {
+        //   validator:
+        // }
+      },
+      submitDate: {
+        type: Date,
+        required: false,
+        allowNull: true,
+        default: null,
+      },
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true } }
 );
+
+scorecardSchema.virtual('status').get(function () {
+  today = new Date();
+  console.log(!this.maker.submitted);
+  if (this.expiryDt < today) {
+    return 'expired';
+  }
+  if (!this.maker.submitted) {
+    return 'draft';
+  }
+  if (this.maker.submitted && this.approver.approved === null) {
+    return 'inProcess';
+  }
+  if (this.maker.submitted && this.approver.approved === true) {
+    return 'approved';
+  }
+  if (this.maker.submitted && this.approver.approved === false) {
+    return 'rejected';
+  }
+});
+
+// scorecardSchema.methods.getStatus = () => {
+//   if (new Date(this.expiryDt).getDate() > new Date().getDate()) {
+//     return 'expired';
+//   }
+//   if (!this.makerSubmit) {
+//     return 'draft';
+//   }
+
+//   if (this.makerSubmit && !this.approved === null) {
+//     return 'inProcess';
+//   }
+
+//   if (this.makerSubmit && this.approved === true) {
+//     return 'approved';
+//   }
+
+//   if (this.makerSubmit && this.approved === false) {
+//     return 'rejected';
+//   }
+// };
 
 module.exports = mongoose.model('Scorecard', scorecardSchema);

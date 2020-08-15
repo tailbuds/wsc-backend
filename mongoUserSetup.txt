@@ -11,3 +11,6 @@ db.createUser(
     ]
   }
 )
+
+
+use graphqlapi

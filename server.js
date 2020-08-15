@@ -6,6 +6,7 @@
  */
 
 // * Importing packages
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -59,6 +60,7 @@ if (process.env.NODE_ENV === 'production') {
 // * Importing routers
 const userRoute = require('./routes/user');
 const scorecardRoute = require('./routes/scorecard');
+const documentsRoute = require('./routes/document');
 
 // * importing controllers
 const errorController = require('./controllers/error');
@@ -85,6 +87,9 @@ app.use(cors());
 // * Compress all routes
 app.use(compression());
 
+// * Make images folder publicly accessible
+app.use('/documents', express.static(path.join(__dirname, 'documents')));
+
 // * express body-parser settings
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -94,6 +99,9 @@ app.use(userRoute);
 
 // * scorecard Route
 app.use(scorecardRoute);
+
+// * document Route
+app.use(documentsRoute);
 
 // * Error Route
 app.use(errorController.get404);

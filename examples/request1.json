@@ -1,0 +1,80 @@
+{
+  "customer": {
+    "name": "Sulaiman Al Harthy",
+    "new": false,
+    "id": "0000007",
+    "gender": "male",
+    "age": "55-65",
+    "nationalityType": "omani",
+    "networth": {
+      "value": "3051000.000",
+      "position": "2.5-5 million OMR",
+      "document": "auditor C",
+      "file": null
+    },
+    "repaymentSource": "assigned cash flow 100%-150%",
+    "proposedLimit": "218000.000",
+    "bcsb": {
+      "totalExistingLimit": "383000.000",
+      "status": "NORMAL",
+      "relatedCompaniesStatus": "NORMAL"
+    },
+    "dpdOneYear": "1-29:3-5",
+    "relationYears": "3-5",
+    "businessYears": "10-20",
+    "facilities": [
+      {
+        "product": "Ijarah Finance",
+        "limit": "148000.000",
+        " collateralCoveragePercent": {
+          "cashMargin": null,
+          "bankGuaranteeOne": null,
+          "bankGuaranteeTwo": null,
+          "shares": null,
+          "freeholdFirstDegree": "greater than 150%",
+          "leaseholdFirstDegree": null,
+          "freeholdSecondDegree": null
+        }
+      },
+      {
+        "product": "Auto Murabaha Finance",
+        "limit": "59000.000",
+        " collateralCoveragePercent": {
+          "cashMargin": "",
+          "bankGuaranteeOne": null,
+          "bankGuaranteeTwo": null,
+          "shares": null,
+          "freeholdFirstDegree": "greater than 150%",
+          "leaseholdFirstDegree": null,
+          "freeholdSecondDegree": null
+        }
+      },
+      {
+        "product": "DM Finance",
+        "limit": "11000.000",
+        " collateralCoveragePercent": {
+          "cashMargin": null,
+          "bankGuaranteeOne": null,
+          "bankGuaranteeTwo": null,
+          "shares": "greater than 150%",
+          "freeholdFirstDegree": null,
+          "leaseholdFirstDegree": null,
+          "freeholdSecondDegree": null
+        }
+      }
+    ],
+    "supportDocumentsFile": null
+  },
+  "orr": null,
+  "expiryDt": "2020-08-14",
+  "maker": {
+    "user": "5f368cc7b6c22c312c2376f0",
+    "submitted": true,
+    "submitDate": "2020-08-13"
+  },
+  "approver": {
+    "user": null,
+    "approved": null,
+    "submitDate": null
+  }
+}

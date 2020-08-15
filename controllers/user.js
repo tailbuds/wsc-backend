@@ -5,8 +5,6 @@
  * Author: Revanth Nemani <revanth.nemani@alizzislamic.com>
  */
 
-const mongoose = require('mongoose');
-
 const User = require('../models/user');
 
 // POST create user
