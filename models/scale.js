@@ -67,5 +67,3 @@ const scaleSchema = new Schema(
   },
   { timestamps: true }
 );
-
-module.exports = mongoose.model('Scale', scaleSchema);

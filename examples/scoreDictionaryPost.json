@@ -56,84 +56,94 @@
   "obligorScores": {
     "netWorth": [
       { "_id": "not available", "value": 0 },
-      { "_id": "less than 1 million OMR", "value": 15 },
-      { "_id": "1-2.5 million OMR", "value": 40 },
-      { "_id": "2.5-5 million OMR", "value": 60 },
-      { "_id": "more than 5 million OMR", "value": 75 }
+      { "_id": "less than 1 million OMR", "value": 5 },
+      { "_id": "1-2.5 million OMR", "value": 10 },
+      { "_id": "2.5-5 million OMR", "value": 20 },
+      { "_id": "more than 5 million OMR", "value": 30 }
     ],
     "networthSupport": [
-      { "_id": "auditor A", "value": 0 },
-      { "_id": "auditor B", "value": 15 },
-      { "_id": "'auditor C", "value": 40 },
-      { "_id": "self declared", "value": 60 },
-      { "_id": "no information", "value": 75 }
+      { "_id": "auditor A", "value": 30 },
+      { "_id": "auditor B", "value": 20 },
+      { "_id": "auditor C", "value": 10 },
+      { "_id": "self declared", "value": 5 },
+      { "_id": "no information", "value": 0 }
     ],
     "repaymentSource": [
-      { "_id": "assigned cash flow above 150%", "value": 0 },
-      { "_id": "assigned cash flow 100%-150%", "value": 15 },
-      { "_id": "'assigned cash flow below 100%", "value": 40 },
-      { "_id": "identified cash flow not assigned", "value": 60 },
-      { "_id": "unidentified cashflow", "value": 75 }
+      { "_id": "assigned cash flow above 150%", "value": 50 },
+      { "_id": "assigned cash flow 100%-150%", "value": 30 },
+      { "_id": "assigned cash flow below 100%", "value": 20 },
+      { "_id": "identified cash flow not assigned", "value": 10 },
+      { "_id": "unidentified cashflow", "value": 0 }
     ],
-    "internalNetworthLimitRatio": [],
-    "totalNetworthLimitRation": [],
+    "internalNetworthLimitRatio": [
+      { "_id": "greater than 6", "value": 50 },
+      { "_id": "6-4", "value": 30 },
+      { "_id": "4-2", "value": 20 },
+      { "_id": "less then 2", "value": 0 }
+    ],
+    "totalNetworthLimitRation": [
+      { "_id": "greater than 4", "value": 50 },
+      { "_id": "4-2.5", "value": 30 },
+      { "_id": "2.5-1.5", "value": 20 },
+      { "_id": "less then 1.5", "value": 0 }
+    ],
     "individualCBOStatus": [
-      { "_id": "NORMAL", "value": 0 },
-      { "_id": "WATCHLIST (O.L.E.M)", "value": 15 },
-      { "_id": "SUB-STANDARD", "value": 40 },
-      { "_id": "DOUBTFUL", "value": 60 },
-      { "_id": "LOSS", "value": 60 },
-      { "_id": "no information (no history)", "value": 75 }
+      { "_id": "NORMAL", "value": 50 },
+      { "_id": "WATCHLIST (O.L.E.M)", "value": 20 },
+      { "_id": "SUB-STANDARD", "value": -100 },
+      { "_id": "DOUBTFUL", "value": -150 },
+      { "_id": "LOSS", "value": -200 },
+      { "_id": "no information (no history)", "value": 0 }
     ],
     "relatedCompaniesCBOStatus": [
-      { "_id": "NORMAL", "value": 0 },
-      { "_id": "WATCHLIST (O.L.E.M)", "value": 15 },
-      { "_id": "SUB-STANDARD", "value": 40 },
-      { "_id": "DOUBTFUL", "value": 60 },
-      { "_id": "LOSS", "value": 60 },
-      { "_id": "NA (no related company)", "value": 75 }
+      { "_id": "NORMAL", "value": 30 },
+      { "_id": "WATCHLIST (O.L.E.M)", "value": 10 },
+      { "_id": "SUB-STANDARD", "value": -50 },
+      { "_id": "DOUBTFUL", "value": -75 },
+      { "_id": "LOSS", "value": -100 },
+      { "_id": "NA (no related company)", "value": 0 }
     ],
     "oneYearDpd": [
-      { "_id": "0", "value": 0 },
-      { "_id": "1-29:less than 2", "value": 15 },
-      { "_id": "'1-29:less than 2", "value": 40 },
-      { "_id": "1-29:less than 2", "value": 60 },
-      { "_id": "30-59:less than 2", "value": 60 },
-      { "_id": "30-59:3-5", "value": 75 },
-      { "_id": "30-59:more than 5", "value": 0 },
-      { "_id": "60-89:less than 2", "value": 15 },
-      { "_id": "60-89:3-5", "value": 40 },
-      { "_id": "60-89:more than 5", "value": 60 },
-      { "_id": "above 90 days:1", "value": 60 },
-      { "_id": "above 90 days:2 and above", "value": 75 },
-      { "_id": "NA (new customer)", "value": 75 }
+      { "_id": "0", "value": 75 },
+      { "_id": "1-29:less than 2", "value": 30 },
+      { "_id": "1-29:3-5", "value": 0 },
+      { "_id": "1-29:more than 5", "value": -30 },
+      { "_id": "30-59:less than 2", "value": -20 },
+      { "_id": "30-59:3-5", "value": -30 },
+      { "_id": "30-59:more than 5", "value": -75 },
+      { "_id": "60-89:less than 2", "value": -50 },
+      { "_id": "60-89:3-5", "value": -75 },
+      { "_id": "60-89:more than 5", "value": -100 },
+      { "_id": "above 90 days:1", "value": -100 },
+      { "_id": "above 90 days:2 and above", "value": -200 },
+      { "_id": "NA (new customer)", "value": 20 }
     ],
 
     "relationYears": [
-      { "_id": "less than 1", "value": 0 },
-      { "_id": "1-3", "value": 15 },
-      { "_id": "3-5", "value": 40 },
-      { "_id": "more than 5", "value": 60 }
+      { "_id": "less than 1", "value": 5 },
+      { "_id": "1-3", "value": 10 },
+      { "_id": "3-5", "value": 20 },
+      { "_id": "more than 5", "value": 40 }
     ],
     "nationality": [
-      { "_id": "omani", "value": 15 },
-      { "_id": "gcc", "value": 40 },
-      { "_id": "expat", "value": 60 }
+      { "_id": "omani", "value": 75 },
+      { "_id": "gcc", "value": 50 },
+      { "_id": "expat", "value": 25 }
     ],
     "businessYears": [
-      { "_id": "more than 20", "value": 15 },
-      { "_id": "10-20", "value": 40 },
-      { "_id": "3-10", "value": 60 },
-      { "_id": "0-3", "value": 60 },
-      { "_id": "no business", "value": 75 }
+      { "_id": "more than 20", "value": 50 },
+      { "_id": "10-20", "value": 30 },
+      { "_id": "3-10", "value": 10 },
+      { "_id": "0-3", "value": 0 },
+      { "_id": "no business", "value": 10 }
     ],
     "ageRange": [
-      { "_id": "less than 30'", "value": 15 },
-      { "_id": "30-45", "value": 40 },
-      { "_id": "45-55", "value": 60 },
-      { "_id": "55-65", "value": 60 },
-      { "_id": "65-70", "value": 75 },
-      { "_id": "more than 70", "value": 75 }
+      { "_id": "less than 30'", "value": 5 },
+      { "_id": "30-45", "value": 25 },
+      { "_id": "45-55", "value": 50 },
+      { "_id": "55-65", "value": 10 },
+      { "_id": "65-70", "value": -10 },
+      { "_id": "more than 70", "value": -20 }
     ]
   }
 }
