@@ -17,6 +17,6 @@ router.get('/scale', scaleController.getScale);
 router.put('/scale', scaleController.putScale);
 
 //POST
-// router.post('/scale', scaleController.postScale);
+router.post('/scale', scaleController.postScale);
 
 module.exports = router;

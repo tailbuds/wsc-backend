@@ -16,4 +16,7 @@ router.get('/scoredictionary', scoreDictionaryController.getScoreDictionary);
 // PUT
 router.put('/scoredictionary', scoreDictionaryController.putScoreDictionary);
 
+// POST
+router.post('/scoredictionary', scoreDictionaryController.postScoreDictionary);
+
 module.exports = router;

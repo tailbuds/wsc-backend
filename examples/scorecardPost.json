@@ -4,7 +4,7 @@
     "new": false,
     "id": "0000007",
     "gender": "male",
-    "age": "55-65",
+    "ageRange": "55-65",
     "nationalityType": "omani",
     "networth": {
       "value": "3051000.000",
@@ -26,7 +26,8 @@
       {
         "product": "Ijarah Finance",
         "limit": "148000.000",
-        " collateralCoveragePercent": {
+        "collateralValue": "840000.000",
+        "collateralCoveragePercent": {
           "cashMargin": null,
           "bankGuaranteeOne": null,
           "bankGuaranteeTwo": null,
@@ -39,8 +40,9 @@
       {
         "product": "Auto Murabaha Finance",
         "limit": "59000.000",
-        " collateralCoveragePercent": {
-          "cashMargin": "",
+        "collateralValue": "570000.000",
+        "collateralCoveragePercent": {
+          "cashMargin": null,
           "bankGuaranteeOne": null,
           "bankGuaranteeTwo": null,
           "shares": null,
@@ -52,7 +54,8 @@
       {
         "product": "DM Finance",
         "limit": "11000.000",
-        " collateralCoveragePercent": {
+        "collateralValue": "840000.000",
+        "collateralCoveragePercent": {
           "cashMargin": null,
           "bankGuaranteeOne": null,
           "bankGuaranteeTwo": null,
@@ -69,8 +72,8 @@
   "expiryDt": "2020-08-14",
   "maker": {
     "user": "5f368cc7b6c22c312c2376f0",
-    "submitted": true,
-    "submitDate": "2020-08-13"
+    "submitted": false,
+    "submitDate": null
   },
   "approver": {
     "user": null,

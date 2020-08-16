@@ -1,10 +1,3 @@
-/**
- * Project: wsc-backend
- * Description: alizz islamic bank wealth management scorecard backend.
- * Copyright (C) 2020 alizz islamic Bank. All Rights Reserved.
- * Author: Revanth Nemani <revanth.nemani@alizzislamic.com>
- */
-
 const Scorecard = require('../models/scorecard');
 
 // POST create scorecard

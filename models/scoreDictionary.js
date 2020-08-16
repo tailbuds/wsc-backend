@@ -26,6 +26,15 @@ const keyValuePairSchema = new Schema({
 
 const scoreDictionarySchema = new Schema(
   {
+    _id: {
+      type: Number,
+      required: false,
+      allowNull: false,
+      default: 1,
+      validate: {
+        validator: (v) => v === 1,
+      },
+    },
     facilityScores: {
       cashMargin: [keyValuePairSchema],
       bankGuaranteeOne: [keyValuePairSchema],
@@ -36,13 +45,13 @@ const scoreDictionarySchema = new Schema(
       freeholdSecondDegree: [keyValuePairSchema],
     },
     obligorScores: {
-      netWorth: [keyValuePairSchema],
+      networth: [keyValuePairSchema],
       networthSupport: [keyValuePairSchema],
       repaymentSource: [keyValuePairSchema],
       internalNetworthLimitRatio: [keyValuePairSchema],
       totalNetworthLimitRation: [keyValuePairSchema],
-      individualCBOStatus: [keyValuePairSchema],
-      relatedCompaniesCBOStatus: [keyValuePairSchema],
+      individualStatus: [keyValuePairSchema],
+      relatedCompaniesStatus: [keyValuePairSchema],
       oneYearDpd: [keyValuePairSchema],
       relationYears: [keyValuePairSchema],
       nationality: [keyValuePairSchema],

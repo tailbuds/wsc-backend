@@ -54,7 +54,7 @@
     ]
   },
   "obligorScores": {
-    "netWorth": [
+    "networth": [
       { "_id": "not available", "value": 0 },
       { "_id": "less than 1 million OMR", "value": 5 },
       { "_id": "1-2.5 million OMR", "value": 10 },
@@ -87,7 +87,7 @@
       { "_id": "2.5-1.5", "value": 20 },
       { "_id": "less then 1.5", "value": 0 }
     ],
-    "individualCBOStatus": [
+    "individualStatus": [
       { "_id": "NORMAL", "value": 50 },
       { "_id": "WATCHLIST (O.L.E.M)", "value": 20 },
       { "_id": "SUB-STANDARD", "value": -100 },
@@ -95,7 +95,7 @@
       { "_id": "LOSS", "value": -200 },
       { "_id": "no information (no history)", "value": 0 }
     ],
-    "relatedCompaniesCBOStatus": [
+    "relatedCompaniesStatus": [
       { "_id": "NORMAL", "value": 30 },
       { "_id": "WATCHLIST (O.L.E.M)", "value": 10 },
       { "_id": "SUB-STANDARD", "value": -50 },

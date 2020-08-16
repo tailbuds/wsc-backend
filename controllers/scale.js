@@ -9,8 +9,8 @@ const Scale = require('../models/scale');
 
 //GET
 exports.getScale = (req, res, next) => {
-  Scale.find()
-    .then((sl) => res.status(200).json(sl[0]))
+  Scale.findById('1')
+    .then((sl) => res.status(200).json(sl))
     .catch((err) => {
       res.status(400).json({
         success: 0,
@@ -24,7 +24,7 @@ exports.putScale = (req, res, next) => {
   switch (req.query.update) {
     case 'orrScale':
       Scale.findByIdAndUpdate(
-        req.query.id,
+        '1',
         { orrScale: req.body.orrScale },
         { useFindAndModify: false, returnOriginal: true }
       )
@@ -42,7 +42,7 @@ exports.putScale = (req, res, next) => {
 
     case 'frrScale':
       Scale.findByIdAndUpdate(
-        req.query.id,
+        '1',
         { frrScale: req.body.frrScale },
         { useFindAndModify: false, returnOriginal: true }
       )

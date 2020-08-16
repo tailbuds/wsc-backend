@@ -9,7 +9,7 @@ const ScoreDictionary = require('../models/scoreDictionary');
 
 // GET
 exports.getScoreDictionary = (req, res, next) => {
-  ScoreDictionary.find()
+  ScoreDictionary.findById('1')
     .then((sd) => res.status(200).json(sd))
     .catch((err) => {
       res.status(400).json({
@@ -24,7 +24,7 @@ exports.putScoreDictionary = (req, res, next) => {
   switch (req.query.update) {
     case 'facilityScores':
       ScoreDictionary.findByIdAndUpdate(
-        req.query.id,
+        '1',
         { facilityScores: req.body.facilityScores },
         { useFindAndModify: false }
       )
@@ -45,7 +45,7 @@ exports.putScoreDictionary = (req, res, next) => {
       break;
     case 'obligorScores':
       ScoreDictionary.findByIdAndUpdate(
-        req.query.id,
+        '1',
         { obligorScores: req.body.obligorScores },
         { useFindAndModify: false }
       )
@@ -68,7 +68,7 @@ exports.putScoreDictionary = (req, res, next) => {
 };
 
 //POST
-exports.postScoreScoreDictionary = (req, res, next) => {
+exports.postScoreDictionary = (req, res, next) => {
   const sd = new ScoreDictionary(req.body);
   sd.save()
     .then((sl) => res.status(201).json({ success: 1, created: sl }))

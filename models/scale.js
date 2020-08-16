@@ -11,6 +11,16 @@ const Schema = mongoose.Schema;
 
 const scaleSchema = new Schema(
   {
+    _id: {
+      type: Number,
+      required: false,
+      allowNull: false,
+      default: 1,
+      validate: {
+        validator: (v) => v === 1,
+        message: 'Only one scale is allowed, please use put to update',
+      },
+    },
     orrScale: [
       {
         _id: {
@@ -67,3 +77,5 @@ const scaleSchema = new Schema(
   },
   { timestamps: true }
 );
+
+module.exports = mongoose.model('Scale', scaleSchema);
