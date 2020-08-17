@@ -24,4 +24,7 @@ router.delete('/scorecards/:id', scorecardController.deleteScorecard);
 
 // PATCH scorecard
 
+// PATCH scoring
+router.patch('/scoring', scorecardController.patchScoring);
+
 module.exports = router;

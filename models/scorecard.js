@@ -41,15 +41,15 @@ const facilitySchema = new Schema(
     collateralCoveragePercent: {
       cashMargin: {
         type: String,
-        allowNull: false,
         required: false,
-        default: '0',
         validate: {
           validator: (v) => {
             return helper.dataHelper('facilityScores', 'cashMargin', v);
           },
           message: 'CashMargin not valid',
         },
+        allowNull: false,
+        default: '0',
       },
       bankGuaranteeOne: {
         type: String,

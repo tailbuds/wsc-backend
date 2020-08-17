@@ -1,5 +1,5 @@
 const Scorecard = require('../models/scorecard');
-
+const scoreCalculator = require('../util/scoreCalculator.js');
 // POST create scorecard
 exports.postScorecard = (req, res, next) => {
   const scorecard = new Scorecard(req.body);
@@ -56,3 +56,34 @@ exports.deleteScorecard = (req, res, next) => {
 
 // * PATCH scorecard
 // exports.patchScoreCard = (req, res, next) = {};
+
+// * PATCH for scoring
+
+exports.patchScoring = (req, res, next) => {
+  const responseBuilder = {};
+  scoreCalculator
+    .facilityScoreCalculator(req.query.id)
+    .then((facilities) => {
+      responseBuilder.success = 1;
+      responseBuilder.postUpdate = facilities;
+      return facilities;
+    })
+    .then((facilities) => {
+      return Scorecard.findByIdAndUpdate(
+        req.query.id,
+        { 'customer.facilities': facilities },
+        { useFindAndModify: false, returnOriginal: true }
+      );
+    })
+    .then((old) => {
+      responseBuilder.preUpdate = old.customer.facilities;
+      return responseBuilder;
+    })
+    .then((response) => res.status(202).json(response))
+    .catch((err) => {
+      res.status(422).json({
+        success: 0,
+        reason: err.message,
+      });
+    });
+};
