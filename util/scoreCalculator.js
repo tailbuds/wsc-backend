@@ -1,7 +1,7 @@
 const Scorecard = require('../models/scorecard');
 const ScoreDictionary = require('../models/scoreDictionary');
 
-exports.facilityScoreCalculator = (sId) => {
+exports.scoreCalculator = (sId) => {
   const data = {};
   const facilities = [];
   const fLoop = [
@@ -13,9 +13,21 @@ exports.facilityScoreCalculator = (sId) => {
     'leaseholdFirstDegree',
     'freeholdSecondDegree',
   ];
+
+  const orrFields = [
+    'ageRange',
+    'nationality',
+    'repaymentSource',
+    'oneYearDpd',
+    'relationYears',
+    'businessYears',
+  ];
+
   return new Promise((resolve, reject) => {
     Scorecard.findById(sId)
       .then((sc) => {
+        data.sc = sc;
+        data.customer = sc.customer;
         data.fc = sc.customer.facilities;
         return;
       })
@@ -23,7 +35,9 @@ exports.facilityScoreCalculator = (sId) => {
         return ScoreDictionary.findById('1');
       })
       .then((sd) => {
+        data.orr = sd.obligorScores;
         data.fs = sd.facilityScores;
+
         return data;
       })
       .then((data) => {
@@ -39,33 +53,65 @@ exports.facilityScoreCalculator = (sId) => {
           v.score = score;
           facilities.push(v);
         });
-        return resolve(facilities);
+        let orrScore = 0;
+
+        //Direct field Inside Customer table
+        orrFields.map((type) => {
+          data.orr[type].map((v) => {
+            if (v._id === data.customer[type]) orrScore += v.value;
+          });
+        });
+
+        //Networth
+        data.orr.networth.map((v) => {
+          if (v._id === data.customer.networth.position) orrScore += v.value;
+        });
+
+        data.orr.networthSupport.map((v) => {
+          if (v._id === data.customer.networth.document) orrScore += v.value;
+        });
+
+        //BCSB
+
+        data.orr.individualStatus.map((v) => {
+          if (v._id === data.customer.bcsb.status) orrScore += v.value;
+        });
+
+        data.orr.relatedCompaniesStatus.map((v) => {
+          if (v._id === data.customer.bcsb.status) orrScore += v.value;
+        });
+        console.log('orrScore= ' + orrScore);
+        return resolve({ facilities, orrScore });
       })
       .catch((err) => console.log(err));
   });
 };
 
-// Object.entries(obj).forEach(([key, value]) => {
-//   console.log(`${key} ${value}`);
-// });
 /*
-v={
-  collateralCoveragePercent=collateralCoveragePercent: {
-    cashMargin: '75%-100%',
-    bankGuaranteeOne: '0',
-    bankGuaranteeTwo: '0',
-    shares: '0',
-    freeholdFirstDegree: 'greater than 150%',
-    leaseholdFirstDegree: null,
-    freeholdSecondDegree: null
+ networth: {
+    value: '3051000.000',
+    position: '2.5-5 million OMR',
+    document: 'auditor C',
+    file: null
   },
-  product: 'Ijarah Finance',
-  limit: '148000.000',
-  collateralValue: '840000.000',
-  score: null,
-  _id: 5f3a641517853c4c9c037aec
+  bcsb: {
+    totalExistingLimit: '383000.000',
+    status: 'NORMAL',
+    relatedCompaniesStatus: 'NORMAL'
+  }
+{
+ internalNetworthLimitRatio: [
+    { value: 50, _id: 'greater than 6' },
+    { value: 30, _id: '6-4' },
+    { value: 20, _id: '4-2' },
+    { value: 0, _id: 'less then 2' }
+  ],
+  totalNetworthLimitRation: [
+    { value: 50, _id: 'greater than 4' },
+    { value: 30, _id: '4-2.5' },
+    { value: 20, _id: '2.5-1.5' },
+    { value: 0, _id: 'less then 1.5' }
+  ],
 }
-
-
-
+  },
 */

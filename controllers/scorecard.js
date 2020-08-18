@@ -62,16 +62,16 @@ exports.deleteScorecard = (req, res, next) => {
 exports.patchScoring = (req, res, next) => {
   const responseBuilder = {};
   scoreCalculator
-    .facilityScoreCalculator(req.query.id)
-    .then((facilities) => {
+    .scoreCalculator(req.query.id)
+    .then((result) => {
       responseBuilder.success = 1;
-      responseBuilder.postUpdate = facilities;
-      return facilities;
+      responseBuilder.postUpdate = result.facilities;
+      return result;
     })
-    .then((facilities) => {
+    .then((result) => {
       return Scorecard.findByIdAndUpdate(
         req.query.id,
-        { 'customer.facilities': facilities },
+        { 'customer.facilities': result.facilities, orr: result.orrScore },
         { useFindAndModify: false, returnOriginal: true }
       );
     })
