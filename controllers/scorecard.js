@@ -65,18 +65,21 @@ exports.patchScoring = (req, res, next) => {
     .scoreCalculator(req.query.id)
     .then((result) => {
       responseBuilder.success = 1;
-      responseBuilder.postUpdate = result.facilities;
+      responseBuilder.postUpdate = result;
       return result;
     })
     .then((result) => {
       return Scorecard.findByIdAndUpdate(
         req.query.id,
-        { 'customer.facilities': result.facilities, orr: result.orrScore },
+        { 'customer.facilities': result.facilities, orr: result.orr },
         { useFindAndModify: false, returnOriginal: true }
       );
     })
     .then((old) => {
-      responseBuilder.preUpdate = old.customer.facilities;
+      responseBuilder.preUpdate = {
+        facilities: old.customer.facilities,
+        orr: old.orr.toString(),
+      };
       return responseBuilder;
     })
     .then((response) => res.status(202).json(response))

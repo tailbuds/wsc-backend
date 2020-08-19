@@ -145,8 +145,8 @@ exports.scoreCalculator = (sId) => {
         return data;
       })
       .then((data) => {
-        orrScore = orrScore.toString();
-        return resolve({ facilities, orrScore });
+        orr = orrScore.toString();
+        return resolve({ facilities, orr });
       })
       .catch((err) => console.log(err));
   });
