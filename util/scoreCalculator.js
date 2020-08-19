@@ -40,7 +40,6 @@ const networthRatioScoring = (ratio, sdPair) => {
 };
 
 exports.scoreCalculator = (sId) => {
-  let score = 0;
   let orrScore = 0;
   const data = {};
   const facilities = [];
@@ -81,6 +80,7 @@ exports.scoreCalculator = (sId) => {
       })
       .then((data) => {
         data.fc.map((v) => {
+          let score = 0;
           fLoop.map((type) => {
             if (v.collateralCoveragePercent[type]) {
               score += data.fs[type].filter(
@@ -148,7 +148,7 @@ exports.scoreCalculator = (sId) => {
         orr = orrScore.toString();
         return resolve({ facilities, orr });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => reject(err));
   });
 };
 

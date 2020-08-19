@@ -142,6 +142,12 @@ const facilitySchema = new Schema(
       required: false,
       default: null,
     },
+    grade: {
+      type: Object,
+      allowNull: true,
+      required: false,
+      default: null,
+    },
   },
   { timestamps: false, toJSON: { virtuals: true } }
 );
@@ -372,6 +378,12 @@ const scorecardSchema = new Schema(
       type: Number,
       allowNull: true,
       required: false,
+      default: null,
+    },
+    orrGrade: {
+      type: Object,
+      allowNull: true,
+      require: false,
       default: null,
     },
     expiryDt: {

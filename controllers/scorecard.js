@@ -1,5 +1,7 @@
 const Scorecard = require('../models/scorecard');
-const scoreCalculator = require('../util/scoreCalculator.js');
+const scoreCalculator = require('../util/scoreCalculator');
+const gradeCalculator = require('../util/gradeCalculator');
+
 // POST create scorecard
 exports.postScorecard = (req, res, next) => {
   const scorecard = new Scorecard(req.body);
@@ -83,6 +85,16 @@ exports.patchScoring = (req, res, next) => {
       return responseBuilder;
     })
     .then((response) => res.status(202).json(response))
+    .then(() => {
+      return gradeCalculator.gradeCalculator(req.query.id);
+    })
+    .then((result) => {
+      return Scorecard.findByIdAndUpdate(
+        req.query.id,
+        { 'customer.facilities': result.facilities, orrGrade: result.orrGrade },
+        { useFindAndModify: false, returnOriginal: true }
+      );
+    })
     .catch((err) => {
       res.status(422).json({
         success: 0,
