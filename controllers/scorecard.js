@@ -1,5 +1,8 @@
 const Scorecard = require('../models/scorecard');
-const scoreCalculator = require('../util/scoreCalculator.js');
+const scoreCalculator = require('../util/scoreCalculator');
+const gradeCalculator = require('../util/gradeCalculator');
+const User = require('../models/user');
+
 // POST create scorecard
 exports.postScorecard = (req, res, next) => {
   const scorecard = new Scorecard(req.body);
@@ -14,10 +17,23 @@ exports.postScorecard = (req, res, next) => {
     });
 };
 
-// * GET scorecards
-
+// * GET scorecard
 exports.getScorecards = (req, res, next) => {
   Scorecard.find()
+    .populate('maker.user', 'username _id')
+    .populate('approver.user', 'username _id')
+    .then((sc) => res.status(200).json(sc))
+    .catch((err) => {
+      res.status(400).json({ success: 0, reason: err.message });
+    });
+};
+
+// * GET scorecard by user id
+exports.getUserScorecards = (req, res, next) => {
+  Scorecard.find()
+    .where({ 'maker.user': req.query.uid })
+    .populate('maker.user', 'username _id')
+    .populate('approver.user', 'username _id')
     .then((sc) => res.status(200).json(sc))
     .catch((err) => {
       res.status(400).json({ success: 0, reason: err.message });
@@ -25,9 +41,10 @@ exports.getScorecards = (req, res, next) => {
 };
 
 // * GET scorecard based on _id
-
 exports.getScorecard = (req, res, next) => {
   Scorecard.findById(req.params.id)
+    .populate('maker.user', 'username _id')
+    .populate('approver.user', 'username _id')
     .then((sc) => res.status(200).json(sc))
     .catch((err) => {
       res.status(400).json({ success: 0, reason: err.message });
@@ -55,31 +72,47 @@ exports.deleteScorecard = (req, res, next) => {
 };
 
 // * PATCH scorecard
-// exports.patchScoreCard = (req, res, next) = {};
+//TODO: patch request for each field at customer level
+// exports.patchScorecard = (req, res, next) = {};
 
 // * PATCH for scoring
-
 exports.patchScoring = (req, res, next) => {
-  const responseBuilder = {};
+  const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
   scoreCalculator
-    .facilityScoreCalculator(req.query.id)
-    .then((facilities) => {
+    .scoreCalculator(req.query.id)
+    .then((result) => {
       responseBuilder.success = 1;
-      responseBuilder.postUpdate = facilities;
-      return facilities;
+      responseBuilder.postUpdate.orr = result.orr;
+      return result;
     })
-    .then((facilities) => {
+    .then((result) => {
       return Scorecard.findByIdAndUpdate(
         req.query.id,
-        { 'customer.facilities': facilities },
+        { 'customer.facilities': result.facilities, orr: result.orr },
         { useFindAndModify: false, returnOriginal: true }
       );
     })
     .then((old) => {
-      responseBuilder.preUpdate = old.customer.facilities;
+      responseBuilder.preUpdate = {
+        orr: old.orr.toString(),
+        facilities: old.customer.facilities,
+        orrGrade: old.orrGrade,
+      };
       return responseBuilder;
     })
-    .then((response) => res.status(202).json(response))
+    .then(() => gradeCalculator.gradeCalculator(req.query.id))
+    .then((result) => {
+      responseBuilder.postUpdate.facilities = result.facilities;
+      responseBuilder.postUpdate.orrGrade = result.orrGrade;
+      return result;
+    })
+    .then((result) => {
+      return Scorecard.updateOne(
+        { _id: req.query.id },
+        { 'customer.facilities': result.facilities, orrGrade: result.orrGrade }
+      );
+    })
+    .then(() => res.status(202).json(responseBuilder))
     .catch((err) => {
       res.status(422).json({
         success: 0,

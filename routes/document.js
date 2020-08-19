@@ -52,4 +52,7 @@ router.patch(
   documentController.patchDocument
 );
 
+//* DELETE documents from archive
+router.delete('/uploads/clear-archives', documentController.deleteArchives);
+
 module.exports = router;

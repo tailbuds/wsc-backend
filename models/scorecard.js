@@ -142,6 +142,12 @@ const facilitySchema = new Schema(
       required: false,
       default: null,
     },
+    grade: {
+      type: Object,
+      allowNull: true,
+      required: false,
+      default: null,
+    },
   },
   { timestamps: false, toJSON: { virtuals: true } }
 );
@@ -374,6 +380,12 @@ const scorecardSchema = new Schema(
       required: false,
       default: null,
     },
+    orrGrade: {
+      type: Object,
+      allowNull: true,
+      require: false,
+      default: null,
+    },
     expiryDt: {
       type: Date,
       required: false,
@@ -480,6 +492,16 @@ scorecardSchema.virtual('status').get(function () {
   if (this.maker.submitted && this.approver.approved === false) {
     return 'rejected';
   }
+});
+
+scorecardSchema.virtual('customer.internalNetworthLimitRatio').get(function () {
+  return `${+this.customer.networth.value / +this.customer.proposedLimit}`;
+});
+
+scorecardSchema.virtual('customer.totalNetworthLimitRatio').get(function () {
+  return `${
+    +this.customer.networth.value / +this.customer.bcsb.totalExistingLimit
+  }`;
 });
 
 scorecardSchema.virtual('customer.wtdAvgFacilityScore').get(function () {

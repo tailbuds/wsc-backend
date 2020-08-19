@@ -13,6 +13,9 @@ const scorecardController = require('../controllers/scorecard');
 // POST scorecard
 router.post('/scorecards', scorecardController.postScorecard);
 
+// * GET scorecard based on user ID
+router.get('/scorecards/users', scorecardController.getUserScorecards);
+
 // * GET Scorecard
 router.get('/scorecards/:id', scorecardController.getScorecard);
 

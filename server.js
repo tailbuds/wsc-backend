@@ -113,8 +113,6 @@ app.use(documentsRoute);
 // * Error Route
 app.use(errorController.get404);
 
-// * Defining NoSQL relationships
-
 // * Initialize mongoose and start service
 mongoose
   .connect(
