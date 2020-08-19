@@ -1,6 +1,7 @@
 const Scorecard = require('../models/scorecard');
 const scoreCalculator = require('../util/scoreCalculator');
 const gradeCalculator = require('../util/gradeCalculator');
+const User = require('../models/user');
 
 // POST create scorecard
 exports.postScorecard = (req, res, next) => {
@@ -16,10 +17,23 @@ exports.postScorecard = (req, res, next) => {
     });
 };
 
-// * GET scorecards
-
+// * GET scorecard
 exports.getScorecards = (req, res, next) => {
   Scorecard.find()
+    .populate('maker.user', 'username _id')
+    .populate('approver.user', 'username _id')
+    .then((sc) => res.status(200).json(sc))
+    .catch((err) => {
+      res.status(400).json({ success: 0, reason: err.message });
+    });
+};
+
+// * GET scorecard by user id
+exports.getUserScorecards = (req, res, next) => {
+  Scorecard.find()
+    .where({ 'maker.user': req.query.uid })
+    .populate('maker.user', 'username _id')
+    .populate('approver.user', 'username _id')
     .then((sc) => res.status(200).json(sc))
     .catch((err) => {
       res.status(400).json({ success: 0, reason: err.message });
@@ -27,9 +41,10 @@ exports.getScorecards = (req, res, next) => {
 };
 
 // * GET scorecard based on _id
-
 exports.getScorecard = (req, res, next) => {
   Scorecard.findById(req.params.id)
+    .populate('maker.user', 'username _id')
+    .populate('approver.user', 'username _id')
     .then((sc) => res.status(200).json(sc))
     .catch((err) => {
       res.status(400).json({ success: 0, reason: err.message });
@@ -92,13 +107,12 @@ exports.patchScoring = (req, res, next) => {
       return result;
     })
     .then((result) => {
-      Scorecard.updateOne(
+      return Scorecard.updateOne(
         { _id: req.query.id },
         { 'customer.facilities': result.facilities, orrGrade: result.orrGrade }
       );
-      return responseBuilder;
     })
-    .then((response) => res.status(202).json(response))
+    .then(() => res.status(202).json(responseBuilder))
     .catch((err) => {
       res.status(422).json({
         success: 0,

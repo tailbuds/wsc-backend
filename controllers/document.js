@@ -7,7 +7,7 @@
 
 const fs = require('fs');
 const path = require('../util/path');
-
+const removeFiles = require('../util/removeFiles');
 // * Importing environment variable
 require('dotenv').config();
 
@@ -98,4 +98,19 @@ exports.patchDocument = (req, res, next) => {
         });
       break;
   }
+};
+
+// * clean up archive based on UD days old
+exports.deleteArchives = (req, res, next) => {
+  removeFiles
+    .deleteOldFiles(req.query.days)
+    .then((df) => {
+      res.status(202).json({
+        success: 1,
+        deletedFiles: df,
+      });
+    })
+    .catch((err) => {
+      res.status(400).json({ success: 0, reason: err.message });
+    });
 };
