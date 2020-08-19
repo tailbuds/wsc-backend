@@ -60,14 +60,13 @@ exports.deleteScorecard = (req, res, next) => {
 // exports.patchScoreCard = (req, res, next) = {};
 
 // * PATCH for scoring
-
 exports.patchScoring = (req, res, next) => {
-  const responseBuilder = {};
+  const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
   scoreCalculator
     .scoreCalculator(req.query.id)
     .then((result) => {
       responseBuilder.success = 1;
-      responseBuilder.postUpdate = result;
+      responseBuilder.postUpdate.orr = result.orr;
       return result;
     })
     .then((result) => {
@@ -79,22 +78,26 @@ exports.patchScoring = (req, res, next) => {
     })
     .then((old) => {
       responseBuilder.preUpdate = {
-        facilities: old.customer.facilities,
         orr: old.orr.toString(),
+        facilities: old.customer.facilities,
+        orrGrade: old.orrGrade,
       };
       return responseBuilder;
     })
-    .then((response) => res.status(202).json(response))
-    .then(() => {
-      return gradeCalculator.gradeCalculator(req.query.id);
+    .then(() => gradeCalculator.gradeCalculator(req.query.id))
+    .then((result) => {
+      responseBuilder.postUpdate.facilities = result.facilities;
+      responseBuilder.postUpdate.orrGrade = result.orrGrade;
+      return result;
     })
     .then((result) => {
-      return Scorecard.findByIdAndUpdate(
-        req.query.id,
-        { 'customer.facilities': result.facilities, orrGrade: result.orrGrade },
-        { useFindAndModify: false, returnOriginal: true }
+      Scorecard.updateOne(
+        { _id: req.query.id },
+        { 'customer.facilities': result.facilities, orrGrade: result.orrGrade }
       );
+      return responseBuilder;
     })
+    .then((response) => res.status(202).json(response))
     .catch((err) => {
       res.status(422).json({
         success: 0,

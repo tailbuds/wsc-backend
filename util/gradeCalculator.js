@@ -18,7 +18,6 @@ exports.gradeCalculator = (sId) => {
         data.orrGrade = sl.orrScale.filter(
           (val) => val.lower < data.orr && data.orr <= val.upper
         )[0];
-
         return sl.frrScale;
       })
       .then((frrScale) => {
@@ -33,7 +32,6 @@ exports.gradeCalculator = (sId) => {
       })
       .then((facilities) => {
         data.facilities = facilities;
-
         return resolve({
           facilities: data.facilities,
           orrGrade: data.orrGrade,
