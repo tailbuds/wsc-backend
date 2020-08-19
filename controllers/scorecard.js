@@ -57,7 +57,8 @@ exports.deleteScorecard = (req, res, next) => {
 };
 
 // * PATCH scorecard
-// exports.patchScoreCard = (req, res, next) = {};
+//TODO: patch request for each field at customer level
+// exports.patchScorecard = (req, res, next) = {};
 
 // * PATCH for scoring
 exports.patchScoring = (req, res, next) => {
