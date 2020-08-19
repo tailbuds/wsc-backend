@@ -482,6 +482,16 @@ scorecardSchema.virtual('status').get(function () {
   }
 });
 
+scorecardSchema.virtual('customer.internalNetworthLimitRatio').get(function () {
+  return `${+this.customer.networth.value / +this.customer.proposedLimit}`;
+});
+
+scorecardSchema.virtual('customer.totalNetworthLimitRatio').get(function () {
+  return `${
+    +this.customer.networth.value / +this.customer.bcsb.totalExistingLimit
+  }`;
+});
+
 scorecardSchema.virtual('customer.wtdAvgFacilityScore').get(function () {
   const limits = this.customer.facilities.map((facility) => +facility.limit);
   const totalLimit = limits.reduce((a, b) => a + b, 0);

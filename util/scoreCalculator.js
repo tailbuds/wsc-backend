@@ -1,7 +1,47 @@
 const Scorecard = require('../models/scorecard');
 const ScoreDictionary = require('../models/scoreDictionary');
 
+const networthRatioScoring = (ratio, sdPair) => {
+  let score = 0;
+  const minPattern = new RegExp(/(?:^|\W)lesser(?:$|\W)/, 'g');
+  const maxPattern = new RegExp(/(?:^|\W)greater(?:$|\W)/, 'g');
+  const digits = new RegExp(/[+-]?(\d*\.)?\d+/, 'gm');
+
+  sdPair.map((pair) => {
+    if (pair._id.match(maxPattern)) {
+      const val = +pair._id.match(digits)[0];
+      if (val < ratio) {
+        score = pair.value;
+        return;
+      }
+    }
+
+    if (pair._id.match('-')) {
+      const vals = pair._id
+        .split('-')
+        .map((x) => +x)
+        .sort();
+      if (vals[0] < ratio && ratio <= vals[1]) {
+        score = pair.value;
+        return;
+      }
+    }
+
+    if (pair._id.match(minPattern)) {
+      const val = +pair._id.match(digits)[0];
+      if (val > ratio) {
+        score = pair.value;
+        return;
+      }
+    }
+  });
+
+  return score;
+};
+
 exports.scoreCalculator = (sId) => {
+  let score = 0;
+  let orrScore = 0;
   const data = {};
   const facilities = [];
   const fLoop = [
@@ -37,12 +77,10 @@ exports.scoreCalculator = (sId) => {
       .then((sd) => {
         data.orr = sd.obligorScores;
         data.fs = sd.facilityScores;
-
         return data;
       })
       .then((data) => {
         data.fc.map((v) => {
-          let score = 0;
           fLoop.map((type) => {
             if (v.collateralCoveragePercent[type]) {
               score += data.fs[type].filter(
@@ -53,34 +91,61 @@ exports.scoreCalculator = (sId) => {
           v.score = score;
           facilities.push(v);
         });
-        let orrScore = 0;
-
+        return data;
+      })
+      .then((data) => {
         //Direct field Inside Customer table
         orrFields.map((type) => {
           data.orr[type].map((v) => {
-            if (v._id === data.customer[type]) orrScore += v.value;
+            if (v._id === data.customer[type]) orrScore += +v.value;
           });
         });
-
+        return data;
+      })
+      .then((data) => {
         //Networth
         data.orr.networth.map((v) => {
-          if (v._id === data.customer.networth.position) orrScore += v.value;
+          if (v._id === data.customer.networth.position) orrScore += +v.value;
         });
-
+        return data;
+      })
+      .then((data) => {
         data.orr.networthSupport.map((v) => {
-          if (v._id === data.customer.networth.document) orrScore += v.value;
+          if (v._id === data.customer.networth.document) orrScore += +v.value;
         });
-
+        return data;
+      })
+      .then((data) => {
         //BCSB
-
         data.orr.individualStatus.map((v) => {
-          if (v._id === data.customer.bcsb.status) orrScore += v.value;
+          if (v._id === data.customer.bcsb.status) orrScore += +v.value;
         });
-
+        return data;
+      })
+      .then((data) => {
         data.orr.relatedCompaniesStatus.map((v) => {
-          if (v._id === data.customer.bcsb.status) orrScore += v.value;
+          if (v._id === data.customer.bcsb.status) orrScore += +v.value;
         });
-        console.log('orrScore= ' + orrScore);
+        return data;
+      })
+      .then((data) => {
+        // * Internal Networth score
+        orrScore += networthRatioScoring(
+          +data.customer.internalNetworthLimitRatio,
+          data.orr.internalNetworthLimitRatio
+        );
+        return data;
+      })
+      .then((data) => {
+        // * Total Networth score
+        orrScore += networthRatioScoring(
+          +data.customer.totalNetworthLimitRatio,
+          data.orr.totalNetworthLimitRatio
+        );
+        return data;
+      })
+      .then((data) => {
+        orrScore = orrScore.toString();
         return resolve({ facilities, orrScore });
       })
       .catch((err) => console.log(err));

@@ -49,7 +49,7 @@ const scoreDictionarySchema = new Schema(
       networthSupport: [keyValuePairSchema],
       repaymentSource: [keyValuePairSchema],
       internalNetworthLimitRatio: [keyValuePairSchema],
-      totalNetworthLimitRation: [keyValuePairSchema],
+      totalNetworthLimitRatio: [keyValuePairSchema],
       individualStatus: [keyValuePairSchema],
       relatedCompaniesStatus: [keyValuePairSchema],
       oneYearDpd: [keyValuePairSchema],
