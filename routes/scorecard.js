@@ -26,6 +26,7 @@ router.get('/scorecards', scorecardController.getScorecards);
 router.delete('/scorecards/:id', scorecardController.deleteScorecard);
 
 // PATCH scorecard
+router.patch('/scorecards', scorecardController.patchScorecard);
 
 // PATCH scoring
 router.patch('/scoring', scorecardController.patchScoring);

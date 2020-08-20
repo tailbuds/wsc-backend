@@ -72,8 +72,82 @@ exports.deleteScorecard = (req, res, next) => {
 };
 
 // * PATCH scorecard
-//TODO: patch request for each field at customer level
-// exports.patchScorecard = (req, res, next) = {};
+exports.patchScorecard = (req, res, next) => {
+  const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
+  const parent = req.query.parent;
+  const child = req.query.child;
+  console.log(parent);
+  console.log(child);
+  if (!parent) {
+    return res.status(422).json({
+      success: 0,
+      reason: 'err: no parent',
+    });
+  }
+  if (parent && child) {
+    return Scorecard.findByIdAndUpdate(
+      req.query.id,
+      { [parent + '.' + child]: req.body[parent][child] },
+      {
+        //overwrite: true,
+        // runValidators: true,
+        useFindAndModify: false,
+        returnOriginal: true,
+      }
+    )
+      .then((sc) => {
+        responseBuilder.preUpdate = sc[parent][child];
+        return;
+      })
+      .then(() => {
+        return Scorecard.findById(req.query.id);
+      })
+      .then((sc) => {
+        responseBuilder.postUpdate = sc[parent][child];
+        return responseBuilder;
+      })
+      .then((response) => {
+        res.status(202).json(response);
+      })
+      .catch((err) => {
+        res.status(422).json({
+          success: 0,
+          reason: err.message,
+        });
+      });
+  }
+  if (parent && !child) {
+    return Scorecard.findByIdAndUpdate(
+      req.query.id,
+      { [parent]: req.body[parent] },
+      {
+        runValidators: true,
+        useFindAndModify: false,
+        returnOriginal: true,
+      }
+    )
+      .then((sc) => {
+        responseBuilder.preUpdate = sc[parent];
+        return;
+      })
+      .then(() => {
+        return Scorecard.findById(req.query.id);
+      })
+      .then((sc) => {
+        responseBuilder.postUpdate = sc[parent];
+        return responseBuilder;
+      })
+      .then((response) => {
+        res.status(202).json(response);
+      })
+      .catch((err) => {
+        res.status(422).json({
+          success: 0,
+          reason: err.message,
+        });
+      });
+  }
+};
 
 // * PATCH for scoring
 exports.patchScoring = (req, res, next) => {
@@ -94,7 +168,7 @@ exports.patchScoring = (req, res, next) => {
     })
     .then((old) => {
       responseBuilder.preUpdate = {
-        orr: old.orr.toString(),
+        orr: old.orr ? old.orr.toString() : old.orr,
         facilities: old.customer.facilities,
         orrGrade: old.orrGrade,
       };
@@ -102,15 +176,16 @@ exports.patchScoring = (req, res, next) => {
     })
     .then(() => gradeCalculator.gradeCalculator(req.query.id))
     .then((result) => {
-      responseBuilder.postUpdate.facilities = result.facilities;
-      responseBuilder.postUpdate.orrGrade = result.orrGrade;
-      return result;
-    })
-    .then((result) => {
-      return Scorecard.updateOne(
-        { _id: req.query.id },
-        { 'customer.facilities': result.facilities, orrGrade: result.orrGrade }
+      return Scorecard.findByIdAndUpdate(
+        req.query.id,
+        { 'customer.facilities': result.facilities, orrGrade: result.orrGrade },
+        { useFindAndModify: false, returnOriginal: false }
       );
+    })
+    .then((sc) => {
+      responseBuilder.postUpdate.facilities = sc.customer.facilities;
+      responseBuilder.postUpdate.orrGrade = sc.orrGrade;
+      return;
     })
     .then(() => res.status(202).json(responseBuilder))
     .catch((err) => {
