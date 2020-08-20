@@ -412,13 +412,17 @@ const scorecardSchema = new Schema(
         default: null,
         validate: {
           validator: function (v) {
-            if (this.maker.submitted && v) {
+            if (!this.maker) {
               return true;
+            } else {
+              if (this.maker.submitted && v) {
+                return true;
+              }
+              if (!this.maker.submitted && v === null) {
+                return true;
+              }
+              return false;
             }
-            if (!this.maker.submitted && v === null) {
-              return true;
-            }
-            return false;
           },
           message: 'inconsistency in the maker object',
         },
@@ -430,6 +434,16 @@ const scorecardSchema = new Schema(
         ref: 'User',
         allowNull: false,
         default: null,
+        validate: {
+          validator: function (v) {
+            if (v === null || !this.maker) {
+              return true;
+            } else {
+              return v.toString() !== this.maker.user.toString();
+            }
+          },
+          message: 'the maker cannot be the approver',
+        },
       },
       approved: {
         type: Boolean,
@@ -438,7 +452,7 @@ const scorecardSchema = new Schema(
         default: null,
         validate: {
           validator: function (v) {
-            if (this.approver.user === null && v === null) {
+            if (!this.approver || (this.approver.user === null && v === null)) {
               return true;
             }
             if (
@@ -459,7 +473,7 @@ const scorecardSchema = new Schema(
         default: null,
         validate: {
           validator: function (v) {
-            if (this.approver.user === null && v === null) {
+            if (!this.approver || (this.approver.user === null && v === null)) {
               return true;
             }
             if (this.approver.user && v) {

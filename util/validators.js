@@ -6,6 +6,7 @@
  */
 
 const ScoreDictionary = require('../models/scoreDictionary');
+const Scorecard = require('../models/scorecard');
 
 exports.isAmount = function (value) {
   value.match('^[d]+[.][d]{3}$');
@@ -29,7 +30,7 @@ exports.dataHelper = (type, field, checkValue) => {
         return resolve(list.includes(checkValue));
       })
       .catch((err) => {
-        console.log(err);
+        reject(err);
       });
   });
 };

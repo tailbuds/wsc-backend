@@ -76,8 +76,6 @@ exports.patchScorecard = (req, res, next) => {
   const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
   const parent = req.query.parent;
   const child = req.query.child;
-  console.log(parent);
-  console.log(child);
   if (!parent) {
     return res.status(422).json({
       success: 0,
@@ -90,7 +88,7 @@ exports.patchScorecard = (req, res, next) => {
       { [parent + '.' + child]: req.body[parent][child] },
       {
         //overwrite: true,
-        // runValidators: true,
+        runValidators: true,
         useFindAndModify: false,
         returnOriginal: true,
       }
@@ -163,7 +161,7 @@ exports.patchScoring = (req, res, next) => {
       return Scorecard.findByIdAndUpdate(
         req.query.id,
         { 'customer.facilities': result.facilities, orr: result.orr },
-        { useFindAndModify: false, returnOriginal: true }
+        { runValidators: true, useFindAndModify: false, returnOriginal: true }
       );
     })
     .then((old) => {
@@ -179,7 +177,7 @@ exports.patchScoring = (req, res, next) => {
       return Scorecard.findByIdAndUpdate(
         req.query.id,
         { 'customer.facilities': result.facilities, orrGrade: result.orrGrade },
-        { useFindAndModify: false, returnOriginal: false }
+        { runValidators: true, useFindAndModify: false, returnOriginal: false }
       );
     })
     .then((sc) => {
