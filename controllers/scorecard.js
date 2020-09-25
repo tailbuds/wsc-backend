@@ -225,7 +225,6 @@ exports.patchScorecard = (req, res, next) => {
   }
 
   if (parent && child && subchild) {
-    console.log('im here');
     return Scorecard.findByIdAndUpdate(
       req.query.id,
       {
