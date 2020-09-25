@@ -72,17 +72,95 @@ exports.deleteScorecard = (req, res, next) => {
 };
 
 // * PATCH scorecard
+// exports.patchScorecard = (req, res, next) => {
+//   const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
+//   const parent = req.query.parent;
+//   const child = req.query.child;
+//   if (!parent) {
+//     return res.status(422).json({
+//       success: 0,
+//       reason: 'err: no parent',
+//     });
+//   }
+//   if (parent && child) {
+//     return Scorecard.findByIdAndUpdate(
+//       req.query.id,
+//       { [parent + '.' + child]: req.body[parent][child] },
+//       {
+//         //overwrite: true,
+//         runValidators: true,
+//         useFindAndModify: false,
+//         returnOriginal: true,
+//       }
+//     )
+//       .then((sc) => {
+//         responseBuilder.preUpdate = sc[parent][child];
+//         return;
+//       })
+//       .then(() => {
+//         return Scorecard.findById(req.query.id);
+//       })
+//       .then((sc) => {
+//         responseBuilder.postUpdate = sc[parent][child];
+//         return responseBuilder;
+//       })
+//       .then((response) => {
+//         res.status(202).json(response);
+//       })
+//       .catch((err) => {
+//         res.status(422).json({
+//           success: 0,
+//           reason: err.message,
+//         });
+//       });
+//   }
+//   if (parent && !child) {
+//     return Scorecard.findByIdAndUpdate(
+//       req.query.id,
+//       { [parent]: req.body[parent] },
+//       {
+//         runValidators: true,
+//         useFindAndModify: false,
+//         returnOriginal: true,
+//       }
+//     )
+//       .then((sc) => {
+//         responseBuilder.preUpdate = sc[parent];
+//         return;
+//       })
+//       .then(() => {
+//         return Scorecard.findById(req.query.id);
+//       })
+//       .then((sc) => {
+//         responseBuilder.postUpdate = sc[parent];
+//         return responseBuilder;
+//       })
+//       .then((response) => {
+//         res.status(202).json(response);
+//       })
+//       .catch((err) => {
+//         res.status(422).json({
+//           success: 0,
+//           reason: err.message,
+//         });
+//       });
+//   }
+// };
+
+// * PATCH for scoring
+
 exports.patchScorecard = (req, res, next) => {
   const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
   const parent = req.query.parent;
   const child = req.query.child;
+  const subchild = req.query.subchild;
   if (!parent) {
     return res.status(422).json({
       success: 0,
       reason: 'err: no parent',
     });
   }
-  if (parent && child) {
+  if (parent && child && !subchild) {
     return Scorecard.findByIdAndUpdate(
       req.query.id,
       { [parent + '.' + child]: req.body[parent][child] },
@@ -114,7 +192,7 @@ exports.patchScorecard = (req, res, next) => {
         });
       });
   }
-  if (parent && !child) {
+  if (parent && !child && !subchild) {
     return Scorecard.findByIdAndUpdate(
       req.query.id,
       { [parent]: req.body[parent] },
@@ -145,9 +223,46 @@ exports.patchScorecard = (req, res, next) => {
         });
       });
   }
+
+  if (parent && child && subchild) {
+    console.log('im here');
+    return Scorecard.findByIdAndUpdate(
+      req.query.id,
+      {
+        [parent + '.' + child + '.' + subchild]: req.body[parent][child][
+          subchild
+        ],
+      },
+      {
+        //overwrite: true,
+        runValidators: true,
+        useFindAndModify: false,
+        returnOriginal: true,
+      }
+    )
+      .then((sc) => {
+        responseBuilder.preUpdate = sc[parent][child][subchild];
+        return;
+      })
+      .then(() => {
+        return Scorecard.findById(req.query.id);
+      })
+      .then((sc) => {
+        responseBuilder.postUpdate = sc[parent][child][subchild];
+        return responseBuilder;
+      })
+      .then((response) => {
+        res.status(202).json(response);
+      })
+      .catch((err) => {
+        res.status(422).json({
+          success: 0,
+          reason: err.message,
+        });
+      });
+  }
 };
 
-// * PATCH for scoring
 exports.patchScoring = (req, res, next) => {
   const responseBuilder = { success: 1, postUpdate: {}, preUpdate: {} };
   scoreCalculator
